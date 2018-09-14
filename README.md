@@ -1,6 +1,6 @@
 # Boost your Spring Boot app with Open Liberty
 
-Spring Boot is a popular programming model for building cloud native Java applications. Liberty has supported running Spring framework applications for a long time, and supports running Spring Boot applications packaged as a WAR file. Spring Boot makes it easy to build WAR files, and that's great for situations where you need to deploy to an app server. However, there are limitations (such as not respecting some of the annotated configuration) when deploying as a WAR file. This lab will deploy Spring Boot applications to Liberty and create an uber JAR and Docker image using Open Liberty.
+Spring Boot is a popular programming model for building cloud native Java applications. Liberty has supported running Spring framework applications for a long time, and supports running Spring Boot applications packaged as a WAR file. Spring Boot makes it easy to build WAR files, and that's great for situations where you need to deploy to an app server. However, there are limitations (such as only having endpoints served from a single host port config) when deploying as a WAR file. This lab will deploy Spring Boot applications to Liberty and create an uber JAR and Docker image using Open Liberty.
 
 ## Introduction
 
@@ -34,17 +34,17 @@ Browse to `http://localhost:8080/`
 
 Even though the application is launched directly as a JAR, there is still an embedded application server inside. The application server, in this case Tomcat, provides the core technologies needed to host a web-based Java app. This is known as a servlet container, after the Java EE servlet specification.
 
-The Spring Boot application can be directly deployed to Liberty as an uber jar since Liberty 18.0.0.2. Deploying the application to a server is useful when you already have a bunch of application servers already created, or have to manage applications which use different programming models like Spring, Java EE and MicroProfile.
+The Spring Boot application can be directly deployed to Liberty as an uber jar since Liberty 18.0.0.2. Deploying the application to a server is useful when you already have a bunch of application servers created or have to manage applications which use different programming models like Spring, Java EE and MicroProfile.
 
-If you would like to deploy to Liberty follow [these instructions](Deploy-to-Liberty.md) use the Boost maven plugin to install Liberty and deploy the application to a managed runtime.  However, there are many steps which make the developer experience more complicated than it should be. Enter the Liberty uber jar.
+If you would like to deploy to Liberty follow [these instructions](Deploy-to-Liberty.md) use the Boost maven plugin to install Liberty and deploy the application to a managed runtime.  This process can involve many steps which makes the developer experience more complicated than it could be. Enter the Liberty uber jar.
 
 ## The Liberty uber jar
 
-These steps replace the embedded Tomcat server in the Spring Boot uber jar with an embdded Open Liberty server.
+The Liberty uber jar works like a Spring Boot uber jar, embedding the application server inside the JAR file. These steps use the Boost maven plugin to replace the embedded Tomcat server in the Spring Boot uber jar with an embdded Open Liberty server.
 
 ### The build
 
-Add the following to the end of `pom.xml` build plugins section. The plugin needs to be included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
+First, configure the Boost maven plugin in the `pom.xml` at the end of build plugins section with the `package` execution goal. The plugin needs to be included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
 
 ```xml
   <plugin>
@@ -71,42 +71,45 @@ Run `java -jar target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar`
 
 Browse to `http://localhost:8080/`
 
-INSERT SOMETHING HERE
+You now have a Spring Boot application running on Open Liberty packaged as an uber jar.
 
 ## Create a Liberty based Docker image
 
-ABC
+Docker is a very popular deployment technology, enabling developers to build applications which behave the same once deployed, delivering on the age old saying 'it works on my machine!'. The Maven boost plugin makes it easy to build a Docker image for your Spring Boot application with minimal knowledge of Docker. Follow the Docker [Getting Started instructions](https://www.docker.com/get-started) to install Docker on your system. .
 
 ### The build
 
-Branch: `git checkout demo3-dockerize`
-1. Add the following to the end of pom.xml build plugins section:
-    ```xml
-      <plugin>
-            <groupId>io.openliberty.boost</groupId>
-            <artifactId>boost-maven-plugin</artifactId>
-            <version>0.1</version>
-            <executions>
-              <execution>
-                    <goals>
-                          <goal>docker-build</goal>
-                    </goals>
-              </execution>
-           </executions>
-      </plugin>
-    ```
-2. Run `./mvnw clean install`
+Configure the Boost maven plugin in the `pom.xml` at the end of build plugins section with the `docker-build` execution goal. The plugin needs to be included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
+
+```xml
+  <plugin>
+    <groupId>io.openliberty.boost</groupId>
+    <artifactId>boost-maven-plugin</artifactId>
+    <version>0.1</version>
+    <executions>
+      <execution>
+        <goals>
+          <goal>docker-build</goal>
+        </goals>
+     </execution>
+   </executions>
+  </plugin>
+```
+
+Run `./mvnw clean install`
+
+This produces a [dual layer](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) Docker image for your Spring Boot application.
 
 ### Run the app
 
-The application 3. Run the Docker image
+Now run the application. You will notice that Liberty starts and then loads the Spring Boot application.
 
 Run `docker run -p 9080:9080 spring-petclinic`
 
 Browse to `http://localhost:9080/`
 
-INSERT HERE
+The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to seprate the Spring Boot application from the Spring Boot and third-party libraries. It uses [Open Liberty](https://openliberty.io/) and [Eclipse Open J9](https://www.eclipse.org/openj9/) as its base images.
 
 ### Summary
 
-You've seen how easy it is to use Liberty in your Spring Boot project, and to build Docker images based on Open Liberty and Open J9. Liberty ♥ Spring
+You've seen how easy it is to use Liberty in your Spring Boot project and to build Docker images based on Open Liberty and Open J9. Liberty ♥ Spring

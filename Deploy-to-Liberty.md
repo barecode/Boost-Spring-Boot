@@ -1,6 +1,6 @@
 # Boost your Spring Boot app with Open Liberty
 
-These instructions are an optional step in the main QuickLab flow. Be sure to complete the [Introduction section](README.md#Introduction) before following these steps.
+These instructions are an optional step in the main QuickLab flow. Be sure to complete the [Introduction](README.md#introduction) section before following these steps.
 
 ## Deploy the Spring Boot app to Liberty
 
@@ -10,7 +10,7 @@ These instructions use the Boost maven plugin to install Liberty and deploy the 
 
 ### Install Liberty
 
-First, configure the Boost maven plugin in the `pom.xml`. Add the following lines to the build plugins:
+First, configure the Boost maven plugin in the `pom.xml`. Add the following lines to the build plugins section:
 
 ```xml
   <plugin>
@@ -60,7 +60,7 @@ Run `cp target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar target/liberty/wlp/usr/
 
 Now browse to `http://localhost:9080/` to see Spring Petclinic.
 
-When done, stop the server.
+When you done exploring Petclinic, stop the server.
 
 Run `./mvnw boost:stop`
 
