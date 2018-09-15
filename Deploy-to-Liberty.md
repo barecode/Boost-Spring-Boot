@@ -4,13 +4,13 @@ These instructions are an optional step in the main QuickLab flow. Be sure to co
 
 ## Deploy the Spring Boot app to Liberty
 
-The Spring Boot application can be directly deployed to Liberty as an uber jar since Liberty 18.0.0.2. Deploying the application to a server is useful when you already have a bunch of application servers already created, or have to manage applications which use different programming models like Spring, Java EE and MicroProfile.
+Since Liberty 18.0.0.2, Spring Boot applications can be directly deployed to Liberty as uber jars. Deploying the application to a server is useful when you already have an application server created or want to have a consistent management approach for applications which use different programming models like Spring, Java EE and MicroProfile.
 
 These instructions use the Boost maven plugin to install Liberty and deploy the application to a managed runtime.
 
 ### Install Liberty
 
-First, configure the Boost maven plugin in the `pom.xml`. Add the following lines to the build plugins section:
+Inspect the `pom.xml` - the Boost maven plugin has already been configured.
 
 ```xml
   <plugin>
@@ -20,7 +20,7 @@ First, configure the Boost maven plugin in the `pom.xml`. Add the following line
   </plugin>
 ```
 
-Next, use the Boost plugin to start Liberty as a managed runtime.
+Use the Boost plugin to start Liberty.
 
 Run `./mvnw boost:start`
 
