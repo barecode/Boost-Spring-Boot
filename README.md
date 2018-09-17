@@ -32,7 +32,7 @@ Run `java -jar target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar`
 
 Browse to `http://localhost:8080/`
 
-Even though the application is launched directly as a JAR, there is still an embedded application server inside. The application server, in this case Tomcat, provides the core technologies needed to host a Java web app. The app server provides a servlet container as defined by the Java EE servlet specification.
+Even though the application is launched directly as a JAR, there is still an embedded servlet container inside. The embedded Servlet container, in this case Tomcat, provides the core technologies needed to host a Java web app. The embedded Tomcat Servlet container provides a subset of capabilties defined by the Java EE Servlet specification.
 
 Since Liberty 18.0.0.2, Spring Boot applications can be directly deployed to Liberty as uber jars. Deploying the application to a server is useful when you already have an application server created or want to have a consistent management approach for applications which use different programming models like Spring, Java EE and MicroProfile.
 
