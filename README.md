@@ -1,6 +1,6 @@
 # Boost your Spring Boot app with Open Liberty
 
-Spring Boot is a popular programming model for building cloud native Java applications. Liberty has supported running Spring framework applications for a long time and supports running Spring Boot applications packaged as a WAR file. Spring Boot makes it easy to build WAR files, and that's great for situations where you need to deploy to an app server. However, there are limitations (such as only having endpoints served from a single host port config) when deploying as a WAR file. Liberty now supports running Spring Boot applications without repackaing as a WAR. In this this lab you will run Spring Boot applications on Liberty using a variety of methods without the limitations.
+Spring Boot is a popular programming model for building cloud native Java applications. Liberty has supported running Spring framework applications for a long time and supports running Spring Boot applications packaged as a WAR file. Spring Boot makes it easy to build WAR files, and that's great for situations where you need to deploy to an app server. However, there are limitations when deploying as a WAR file - such as only having endpoints served from a single host port config or not being able to use WebFlux APIs. Liberty now supports running Spring Boot applications without repackaing as a WAR. In this this lab you will run Spring Boot applications on Liberty using a variety of methods without the limitations.
 
 ## Introduction
 
