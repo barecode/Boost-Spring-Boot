@@ -36,7 +36,7 @@ Even though the application is launched directly as a JAR, there is still an emb
 
 Since Liberty 18.0.0.2, Spring Boot applications can be directly deployed to Liberty as uber jars. Deploying the application to a server is useful when you already have an application server created or want to have a consistent management approach for applications which use different programming models like Spring, Java EE and MicroProfile.
 
-If you would like to deploy the uber jar to Liberty follow [these instructions](Deploy-to-Liberty.md). You will use the `boost-maven-plugin` to install Liberty and deploy the application to a managed runtime.  This process can involve many steps which makes the developer experience more complicated than it otherwise could be. Enter the Liberty uber jar.
+If you would like to deploy the uber jar to Liberty follow [these instructions](Deploy-to-Liberty.md). You will use the `boost-maven-plugin` to deploy Liberty and deploy the application to a managed runtime.  This process can involve many steps which makes the developer experience more complicated than it otherwise could be. Enter the Liberty uber jar.
 
 ## The Liberty uber jar
 
@@ -65,7 +65,7 @@ Run `./mvnw clean package`
 
 ### Run the app
 
-Now run the application. You will notice that Liberty starts and then loads the Spring Boot application.
+Now run the application.
 
 Run `java -jar target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar`
 
@@ -75,9 +75,11 @@ Browse to `http://localhost:8080/`
 
 You now have a Spring Boot application running on Open Liberty packaged as an uber jar.
 
-## Create a Liberty based Docker image
+## Create a Docker image
 
-Docker is a very popular deployment technology, enabling developers to build applications which behave the same once deployed, delivering on the age old saying 'it works on my machine!'. The `boost-maven-plugin` makes it easy to build a Docker image for your Spring Boot application with minimal knowledge of Docker. Follow the Docker [Getting Started instructions](https://www.docker.com/get-started) to install Docker on your system.
+Docker is a very popular deployment technology. Docker enables developers to package application into a deployable image. The Docker image behaves consistently no matter where it is deployed. The consistent behaviour makes Docker ideal for continuous delivery pipelines, because the application behaves the same between development, QA and production. Since the Docker image works the same way everywhere, it makes Docker ideal for delivering on the age old saying 'it works on my machine!' :)
+
+The `boost-maven-plugin` makes it easy to build a Docker image for your Spring Boot application with minimal knowledge of Docker. All that is required is to have Docker installed. Follow the Docker [Getting Started instructions](https://www.docker.com/get-started) to install Docker on your system.
 
 ### The build
 
@@ -98,19 +100,23 @@ Configure the `boost-maven-plugin` in the `pom.xml` at the end of build plugins 
   </plugin>
 ```
 
-Run `./mvnw clean install`
+Run `./mvnw clean package`
 
-This produces a [dual layer](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) Docker image for your Spring Boot application.
+This produces a Docker image for your Spring Boot application.
 
 ### Run the app
 
-Now run the application. You will notice that Liberty starts and then loads the Spring Boot application.
+Now run the application.
 
 Run `docker run -p 9080:9080 spring-petclinic`
 
+You will notice that Liberty starts and then loads the Spring Boot application.
+
 Browse to `http://localhost:9080/`
 
-The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to seprate the Spring Boot application from the Spring Boot and third-party libraries. This reduces iterative build and deployment time and storage cost. The base image is [Open Liberty](https://openliberty.io/) with [Eclipse Open J9](https://www.eclipse.org/openj9/), two Java runtimes designed and optimized for the cloud.
+The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to separate the Spring Boot application from the Spring Boot and third-party libraries. These [two layers](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) reduce iterative build and deployment time, and storage cost. The base image is [Open Liberty](https://openliberty.io/) with [Eclipse OpenJ9](https://www.eclipse.org/openj9/), two Java runtimes designed and optimized for the cloud.
+
+
 
 ### Summary
 
