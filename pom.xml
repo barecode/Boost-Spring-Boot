@@ -205,7 +205,13 @@
       <plugin>
         <groupId>io.openliberty.boost</groupId>
         <artifactId>boost-maven-plugin</artifactId>
-        <version>0.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>package</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
