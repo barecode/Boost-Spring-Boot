@@ -69,6 +69,8 @@ Now run the application. You will notice that Liberty starts and then loads the 
 
 Run `java -jar target/spring-petclinic-2.0.0.BUILD-SNAPSHOT.jar`
 
+You will notice that Liberty starts and then loads the Spring Boot application.
+
 Browse to `http://localhost:8080/`
 
 You now have a Spring Boot application running on Open Liberty packaged as an uber jar.
