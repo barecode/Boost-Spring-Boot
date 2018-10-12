@@ -36,15 +36,15 @@ Even though the application is launched directly as a JAR, there is still an emb
 
 Since Liberty 18.0.0.2, Spring Boot applications can be directly deployed to Liberty as uber jars. Deploying the application to a server is useful when you already have an application server created or want to have a consistent management approach for applications which use different programming models like Spring, Java EE and MicroProfile.
 
-If you would like to deploy the uber jar to Liberty follow [these instructions](Deploy-to-Liberty.md). You will use the Boost maven plugin to install Liberty and deploy the application to a managed runtime.  This process can involve many steps which makes the developer experience more complicated than it otherwise could be. Enter the Liberty uber jar.
+If you would like to deploy the uber jar to Liberty follow [these instructions](Deploy-to-Liberty.md). You will use the `boost-maven-plugin` to install Liberty and deploy the application to a managed runtime.  This process can involve many steps which makes the developer experience more complicated than it otherwise could be. Enter the Liberty uber jar.
 
 ## The Liberty uber jar
 
-The Liberty uber jar works like a Spring Boot uber jar, embedding the application server inside the JAR file. These steps use the Boost maven plugin to replace the embedded Tomcat server in the Spring Boot uber jar with an embdded Open Liberty server.
+The Liberty uber jar works like a Spring Boot uber jar, embedding the application server inside the JAR file. These steps use the `boost-maven-plugin` to replace the embedded Tomcat server in the Spring Boot uber jar with an embdded Open Liberty server.
 
 ### The build
 
-First, configure the Boost maven plugin in the `pom.xml` with the `package` execution goal. The Boost maven plugin is included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
+First, configure the `boost-maven-plugin` in the `pom.xml` with the `package` execution goal. The `boost-maven-plugin` is included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
 
 ```xml
   <plugin>
@@ -75,11 +75,11 @@ You now have a Spring Boot application running on Open Liberty packaged as an ub
 
 ## Create a Liberty based Docker image
 
-Docker is a very popular deployment technology, enabling developers to build applications which behave the same once deployed, delivering on the age old saying 'it works on my machine!'. The Maven boost plugin makes it easy to build a Docker image for your Spring Boot application with minimal knowledge of Docker. Follow the Docker [Getting Started instructions](https://www.docker.com/get-started) to install Docker on your system.
+Docker is a very popular deployment technology, enabling developers to build applications which behave the same once deployed, delivering on the age old saying 'it works on my machine!'. The `boost-maven-plugin` makes it easy to build a Docker image for your Spring Boot application with minimal knowledge of Docker. Follow the Docker [Getting Started instructions](https://www.docker.com/get-started) to install Docker on your system.
 
 ### The build
 
-Configure the Boost maven plugin in the `pom.xml` at the end of build plugins section with the `docker-build` execution goal. The plugin needs to be included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
+Configure the `boost-maven-plugin` in the `pom.xml` at the end of build plugins section with the `docker-build` execution goal. The plugin needs to be included after the `spring-boot-maven-plugin` as it uses the output from the Spring Boot build.
 
 ```xml
   <plugin>
