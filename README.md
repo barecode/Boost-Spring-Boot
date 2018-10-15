@@ -171,6 +171,6 @@ By changing how the Docker image is built and layered we minimize the amount of 
 
 ### Summary
 
-You've seen how easy it is to use Liberty in your Spring Boot project and to build Docker images based on Open Liberty and OpenJ9.
+You've seen how easy it is to use Liberty in your Spring Boot project and to build Docker images based on Open Liberty and OpenJ9 with the `boost-maven-plugin`.
 
 `Liberty ♥ Spring`
