@@ -101,31 +101,31 @@ You will notice that Liberty starts and then loads the Spring Boot application.
 
 Browse to `http://localhost:9080/`
 
-The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to separate the application classes from the Spring Boot and third-party libraries. These [two layers](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) reduce iterative build, deployment time, and storage cost. The base image is [Open Liberty](https://openliberty.io/) with [Eclipse OpenJ9](https://www.eclipse.org/openj9/), both are designed and optimized for the cloud.
+The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to separate the application classes from the Spring Boot and third-party libraries. These [two layers](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) reduce iterative build time, deployment time, and storage cost. The  image is based on [Open Liberty](https://openliberty.io/) with [Eclipse OpenJ9](https://www.eclipse.org/openj9/), both of which are designed and optimized for the cloud.
 
 ## Docker layers matter
 
-You might be wondering why an 'optimized' Docker image matters. A Docker image is comprised of layers. Each layer adds content to the final Docker image. These are they layers for a Spring Petclinic application built with a simple Dockerfile:
+You might be wondering why an 'optimized' Docker image matters. A Docker image is comprised of layers. Each layer adds content to the final Docker image. For example, these are they layers for the Spring Petclinic application built with a simple Dockerfile:
 
 ```
 $ docker history springio/spring-petclinic
 IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
-94b0366d5ba2        52 seconds ago      /bin/sh -c #(nop)  ENTRYPOINT ["java" "-Djav…   0B                  
-213dff56a4bd        53 seconds ago      /bin/sh -c #(nop) COPY file:d3551559c2aa35af…   38.3MB              
-bc453a32748e        6 minutes ago       /bin/sh -c #(nop)  ARG JAR_FILE                 0B                  
-7fe0bb0d8026        6 minutes ago       /bin/sh -c #(nop)  VOLUME [/tmp]                0B                  
-cc2179b8f042        8 days ago          /bin/sh -c set -x  && apk add --no-cache   o…   97.4MB              
-<missing>           8 days ago          /bin/sh -c #(nop)  ENV JAVA_ALPINE_VERSION=8…   0B                  
-<missing>           8 days ago          /bin/sh -c #(nop)  ENV JAVA_VERSION=8u151       0B                  
-<missing>           8 days ago          /bin/sh -c #(nop)  ENV PATH=/usr/local/sbin:…   0B                  
-<missing>           8 days ago          /bin/sh -c #(nop)  ENV JAVA_HOME=/usr/lib/jv…   0B                  
-<missing>           8 days ago          /bin/sh -c {   echo '#!/bin/sh';   echo 'set…   87B                 
-<missing>           8 days ago          /bin/sh -c #(nop)  ENV LANG=C.UTF-8             0B                  
-<missing>           5 months ago        /bin/sh -c #(nop)  CMD ["/bin/sh"]              0B                  
-<missing>           5 months ago        /bin/sh -c #(nop) ADD file:093f0723fa46f6cdb…   4.15MB              
+5d9c6c3ed39e        30 seconds ago      /bin/sh -c #(nop)  ENTRYPOINT ["java" "-Djav…   0B                  
+c25033695d03        30 seconds ago      /bin/sh -c #(nop) COPY file:36611c67d3cbced9…   56.1MB              
+27aef1178da6        31 seconds ago      /bin/sh -c #(nop)  VOLUME [/tmp]                0B                  
+54ae553cb104        4 weeks ago         /bin/sh -c set -x  && apk add --no-cache   o…   98.2MB              
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV JAVA_ALPINE_VERSION=8…   0B                  
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV JAVA_VERSION=8u171       0B                  
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV PATH=/usr/local/sbin:…   0B                  
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV JAVA_HOME=/usr/lib/jv…   0B                  
+<missing>           4 weeks ago         /bin/sh -c {   echo '#!/bin/sh';   echo 'set…   87B                 
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV LANG=C.UTF-8             0B                  
+<missing>           4 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/sh"]              0B                  
+<missing>           4 weeks ago         /bin/sh -c #(nop) ADD file:25c10b1d1b41d46a1…   4.41MB              
+              
 ```
 
-The second layer (`213dff56a4bd`) is the entire application fat jar (38.3MB). The Docker image runs exactly the way you’d expect a Spring Boot app to run, however, it suffers from the layering efficiency problem. Every time the application is changed, the entire application JAR is rebuilt and the entire layer is replaced. This happens even if only one line of source code was modified.
+The second layer (`213dff56a4bd`) is the entire application fat jar (56.1MB). The Docker image runs exactly the way you’d expect a Spring Boot app to run, however it suffers from the layering efficiency problem. Every time the application is changed the entire application JAR is rebuilt and the entire layer is replaced. This happens even if only one line of source code was modified.
 
 Now, inspect the Docker image you just built.
 
@@ -165,9 +165,9 @@ IMAGE               CREATED             CREATED BY                              
 <missing>           5 weeks ago         /bin/sh -c #(nop) ADD file:a83ab1826f43e88bc…   115MB   
 ```
 
-Notice the second layer (`24a72a8dc383`) is now much smaller: 34.6MB down from 38.3MB. This is because the application classes were moved to the top-most layer (`9fbf6d908507`) at 389kB and the embedded application server moved down to a lower layer (`95fc6fb1ac6e`).
+Notice the second layer (`24a72a8dc383`) is now smaller: 34.6MB down from 56.1MB. This is because the application classes were moved to the top-most layer (`9fbf6d908507`) at 389kB and the embedded application server moved down to a lower layer (`95fc6fb1ac6e`) which can be re-used.
 
-This is where layering matters - by changing how the Docker image is built and layered we minimize the amount of time needed to rebuild and re-deploy an image. In the output above, notice that the application layer was built 23 seconds ago, while the rest of the layers are weeks old. These old layers are re-used with the new image, and the delta to push over the network and redeploy is the tiny 389kB application layer.
+By changing how the Docker image is built and layered we minimize the amount of time needed to rebuild and re-deploy an image. In the output above, notice that the application layer was built 23 seconds ago, while the rest of the layers are weeks old. These old layers are re-used with the new image, and the delta to push over the network and re-deploy is the tiny 389kB application layer.
 
 ### Summary
 
