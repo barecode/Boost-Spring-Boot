@@ -101,7 +101,7 @@ You will notice that Liberty starts and then loads the Spring Boot application.
 
 Browse to `http://localhost:9080/`
 
-The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to separate the application classes from the Spring Boot and third-party libraries. These [two layers](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) reduce iterative build time, deployment time, and storage cost. The  image is based on [Open Liberty](https://openliberty.io/) with [Eclipse OpenJ9](https://www.eclipse.org/openj9/), both of which are designed and optimized for the cloud.
+The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizing-spring-boot-apps-for-docker.html) to separate the application classes from the Spring Boot and third-party libraries. These [two layers](https://openliberty.io/blog/2018/09/12/build-and-push-spring-boot-docker-images.html) reduce iterative build time, deployment time, and storage cost. The  image is based on [Open Liberty](https://openliberty.io/) with [Eclipse OpenJ9](https://www.eclipse.org/openj9/) available from [adoptopenjdk.net](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=openj9), both of which are designed and optimized for the cloud.
 
 ## Docker layers matter
 
@@ -171,6 +171,6 @@ By changing how the Docker image is built and layered we minimize the amount of 
 
 ### Summary
 
-You've seen how easy it is to use Liberty in your Spring Boot project and to build Docker images based on Open Liberty and OpenJ9 with the `boost-maven-plugin`.
+You've seen how easy it is to use Liberty in your Spring Boot project and to build Docker images based on Open Liberty and Eclipse OpenJ9 with the `boost-maven-plugin`.
 
 `Liberty ♥ Spring`
