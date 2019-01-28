@@ -108,7 +108,6 @@ The Docker image is [optimized](https://openliberty.io/blog/2018/06/29/optimizin
 You might be wondering why an 'optimized' Docker image matters. A Docker image is comprised of layers. Each layer adds content to the final Docker image. For example, these are they layers for the Spring Petclinic application built with a simple Dockerfile:
 
 ```
-$ docker history springio/spring-petclinic
 IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
 5d9c6c3ed39e        30 seconds ago      /bin/sh -c #(nop)  ENTRYPOINT ["java" "-Djav…   0B                  
 c25033695d03        30 seconds ago      /bin/sh -c #(nop) COPY file:36611c67d3cbced9…   56.1MB              
