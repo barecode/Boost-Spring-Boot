@@ -125,7 +125,7 @@ c25033695d03        30 seconds ago      /bin/sh -c #(nop) COPY file:36611c67d3cb
               
 ```
 
-The second layer (`213dff56a4bd`) is the entire application fat jar (56.1MB). The Docker image runs exactly the way you’d expect a Spring Boot app to run, however it suffers from the layering efficiency problem. Every time the application is changed the entire application JAR is rebuilt and the entire layer is replaced. This happens even if only one line of source code was modified.
+The second layer (`c25033695d03`) is the entire application fat jar (56.1MB). The Docker image runs exactly the way you’d expect a Spring Boot app to run, however it suffers from the layering efficiency problem. Every time the application is changed the entire application JAR is rebuilt and the entire layer is replaced. This happens even if only one line of source code was modified.
 
 Now, inspect the Docker image you just built.
 
